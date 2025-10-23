@@ -3,6 +3,9 @@ package io.fluxzero.training.meepleverse.payments.api;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.fluxzero.common.serialization.JsonUtils;
 import io.fluxzero.sdk.Fluxzero;
+import io.fluxzero.sdk.tracking.Consumer;
+import io.fluxzero.sdk.tracking.ErrorHandler;
+import io.fluxzero.sdk.tracking.RetryingErrorHandler;
 import io.fluxzero.sdk.tracking.TrackSelf;
 import io.fluxzero.sdk.tracking.handling.Request;
 import io.fluxzero.sdk.web.HttpRequestMethod;
@@ -13,12 +16,16 @@ import io.fluxzero.training.meepleverse.common.SendWebRequest;
 import io.fluxzero.training.meepleverse.payments.api.model.PaymentId;
 import jakarta.validation.constraints.NotNull;
 import lombok.Value;
+import org.springframework.stereotype.Component;
 
 import static io.fluxzero.sdk.configuration.ApplicationProperties.getProperty;
 import static io.fluxzero.sdk.configuration.ApplicationProperties.requireProperty;
 
 @Value
 @TrackSelf
+@Component
+@Consumer(name = "payments_handler", threads = 2)
+
 public class ValidatePayment extends SendWebRequest implements Request<Boolean> {
     String proxyConsumer = "proxy-payments";
 
