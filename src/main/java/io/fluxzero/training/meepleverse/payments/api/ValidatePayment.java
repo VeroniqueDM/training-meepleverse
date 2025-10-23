@@ -26,6 +26,10 @@ import static io.fluxzero.sdk.configuration.ApplicationProperties.requirePropert
 @Component
 @Consumer(name = "payments_handler", threads = 2)
 
+//@Consumer(name = "payments_handler", threads = 2, errorHandler = RetryingErrorHandler.class)
+// RetryingErrorHandler - Flux will retry 5 times by default
+// See also: ForeverRetryingErrorHandler
+
 public class ValidatePayment extends SendWebRequest implements Request<Boolean> {
     String proxyConsumer = "proxy-payments";
 
